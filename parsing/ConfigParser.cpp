@@ -1,6 +1,5 @@
 #include "ConfigParser.hpp"
 #include <cstdlib>
-#include <sys/stat.h> // vérifier si un dossier existe
 
 // 1. Parcourir les tokens
 // 2. Detecter si on entre dans serveur ou location
@@ -99,14 +98,6 @@ ConfigServer ConfigParser::parseServer() {
 		}
 		else if (_tokens[_pos] == "root") {
 			_pos++;
-			std::string rootPath = _tokens[_pos];
-			struct stat info;
-			if (stat(rootPath.c_str(), &info) != 0) {
-				throw std::runtime_error("Configuration error: root path '" + rootPath + "' does not exist");
-			}
-			if (!(info.st_mode & S_IFDIR)) {
-				throw std::runtime_error("Configuration error: root path '" + rootPath + "' is not a directory");
-			}
 			newServer.setRoot(_tokens[_pos]);
 			_pos++;
 			checkSemicolon();
